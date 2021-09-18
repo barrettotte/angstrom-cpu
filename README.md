@@ -1,6 +1,6 @@
 # angstrom-cpu
 
-A really simple 4-bit CPU designed to do the bare minimum.
+A 4-bit accumulator-based CPU designed to do the bare minimum.
 
 I wanted to have a barebones architecture that I could physically build in
 a weekend and COULD also implement in games such as Satisfactory, Minecraft, Rust, etc.
@@ -9,35 +9,39 @@ a weekend and COULD also implement in games such as Satisfactory, Minecraft, Rus
 
 ### Instruction Set
 
-`IIII XXXX` - 8-bit instruction
+512 bytes = 1024 memory cells
 
-| Opcode | Mnemonic | Description |
-| ------ | -------- | ----------- |
-| 0000 | `STA`  | Store accumulator into memory |
-| 0001 | `LDA`  | Load memory into accumulator |
-| 0010 | `LDI`  | Load immediate into accumulator |
-| 0011 | `INP`  | Load input into accumulator |
-| 0100 | `OUT`  | Load output into accumulator |
-| 0101 | `JNZ`  | Jump if non-zero |
-| 0110 | `JNC`  | Jump if no carry |
-| 0111 | `JMP`  | Jump unconditionally |
-| 1000 | `   `  |  |
-| 1001 | `   `  |  |
-| 1010 | `   `  |  |
-| 1011 | `   `  |  |
-| 1100 | `ADD`  | Add to accumulator |
-| 1101 | `NAND`  | NAND |
-| 1110 | `CMP`  | Compare register |
-| 1111 | `   `  |  |
+`IIII AAAAAAAA` - 16 bit instruction
+`IIII RRRR` - 8 bit instruction
+
+| Opcode | Mnemonic | Syntax | Description |
+| ------ | -------- | ------ | ----------- |
+| 0000   | `LDA`    |        | Load accumulator with memory |
+| 0001   | `STA`    |        | Store accumulator with memory |
+| 0010   | `   `    |        | |
+| 0011   | `   `    |        | |
+| 0100   | `   `    |        | |
+| 0101   | `PHA`    |        | push accumulator to stack |
+| 0110   | `PPA`    |        | pop from stack into accumulator |
+| 0111   | `PHP`    |        | push status register to stack |
+| 1000   | `JMP`    |        | Branch always |
+| 1001   | `BRZ`    |        | Branch on zero flag set |
+| 1010   | `INP`    |        | load input register with accumulator |
+| 1011   | `OUT`    |        | load accumulator into output register |
+| 1100   | `ADD`    |        | add memory to accumulator |
+| 1101   | `   `    |        | |
+| 1110   | `   `    |        | |
+| 1111   | `NOR`    |        | logical NOR memory to accumulator |
+
 
 ### Registers
 
 | Register | Description     |
 | -------- | --------------- |
-| ACC      | Accumulator     |
-| PC       | Program counter |
-| INP      | Input port      |
-| OUT      | Output port     |
+| ACC      | accumulator     |
+| PC       | program counter |
+| SP       | stack pointer   |
+
 
 ## Build
 
@@ -45,4 +49,4 @@ Build and test a Verilog module - `./build.sh mod`
 
 ## References
 
-- xxx
+- [6502 Assembly](https://en.wikibooks.org/wiki/6502_Assembly)
