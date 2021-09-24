@@ -17,3 +17,4 @@ Build and test a Verilog module - `./build.sh mod`
 
 - [6502 Assembly](https://en.wikibooks.org/wiki/6502_Assembly)
 - [Intel 4004 Instruction set](http://e4004.szyc.org/iset.html)
+- [Digital](https://github.com/hneemann/Digital)
