@@ -19,20 +19,18 @@
 | 0011   | `INP`    |        | Load input into accumulator |
 | 0100   | `OUT`    |        | Load accumulator into output |
 | 0101   | `BRZ`    |        | Branch on zero flag set |
-| 0110   | `BRV`    |        | Branch on overflow flag set |
+| 0110   | `BRC`    |        | Branch on carry flag set |
 | 0111   | `JMP`    |        | Jump to address |
-| 1000   | `ADD`    |        | Add memory to accumulator |
-| 1001   | `ADI`    |        | Add immediate to accumulator |
+| 1000   | `ADI`    |        | Add immediate to accumulator |
+| 1001   | `ADD`    |        | Add memory to accumulator |
 | 1010   | `SUB`    |        | Subtract memory to accumulator |
 | 1011   | `AND`    |        | Logical AND accumulator with memory |
 | 1100   | `ORR`    |        | Logical OR accumulator with memory |
 | 1101   | `XOR`    |        | Logical XOR accumulator with memory |
-| 1110   | `LSL`    |        | Logical shift left |
-| 1111   | `LSR`    |        | Logical shift right |
+| 1110   | `LSL`    |        | Logical shift left memory into accumulator |
+| 1111   | `LSR`    |        | Logical shift right memory into accumulator |
 
 ## Registers
-
-All registers are 8-bit.
 
 | Register | Size   | Description     |
 | -------- | ------ | ---------       |
@@ -46,5 +44,5 @@ All registers are 8-bit.
 | -------- | ----- | ----------- |
 | 00000001 | `Z`   | Zero |
 | 00000010 | `C`   | Carry |
-| 00000100 | `V`   | Overflow |
+| 00000100 | `X`   | Unused |
 | 00001000 | `X`   | Unused |
