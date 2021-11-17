@@ -20,7 +20,7 @@
 | 0100   | `OUT`    |        | Load accumulator into output |
 | 0101   | `BRZ`    |        | Branch on zero flag set |
 | 0110   | `BRC`    |        | Branch on carry flag set |
-| 0111   | `JMP`    |        | Jump to address |
+| 0111   | `JMP`    |        | Unconditional jump to address |
 | 1000   | `ADI`    |        | Add immediate to accumulator |
 | 1001   | `ADD`    |        | Add memory to accumulator |
 | 1010   | `SUB`    |        | Subtract memory to accumulator |
@@ -36,13 +36,11 @@
 | -------- | ------ | ---------       |
 | PC       | 12-bit | program counter |
 | AC       | 8-bit  | accumulator     |
-| FL       | 4-bit  | flags register  |
+| FL       | 2-bit  | flags register  |
 
 ## Status Flags
 
-| Mask     | Flag  | Description |
-| -------- | ----- | ----------- |
-| 00000001 | `Z`   | Zero |
-| 00000010 | `C`   | Carry |
-| 00000100 | `X`   | Unused |
-| 00001000 | `X`   | Unused |
+| Mask | Flag  | Description |
+| ---- | ----- | ----------- |
+| 01 | `Z`   | Zero |
+| 10 | `C`   | Carry |
