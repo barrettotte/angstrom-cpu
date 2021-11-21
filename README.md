@@ -1,6 +1,6 @@
 # angstrom-cpu
 
-A 4-bit accumulator-based CPU designed to do the bare minimum.
+A 4-bit accumulator-based CPU designed to do the bare minimum and nothing more. 
 
 I wanted to have a barebones architecture that I could physically build in
 a weekend and COULD also implement in games such as Satisfactory, Minecraft, Rust, etc.
