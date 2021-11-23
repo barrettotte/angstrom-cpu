@@ -2,14 +2,14 @@
 
 module reg8(
   input clk,
-  input we,
-  input [7:0] d,
-  output reg [7:0] q
+  input writeEn,
+  input [7:0] dIn,
+  output reg [7:0] dOut
 );
 
   always @(posedge clk) begin
-    if (we) begin
-      q <= d;
+    if (writeEn) begin
+      dOut <= dIn;
     end
   end
 
