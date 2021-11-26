@@ -1,14 +1,14 @@
-/* RAM - 12-bit addressing, 4-bit word */
+/* RAM 4096x4 - 12-bit addressing, 4-bit word */
 
 `define RAM_SIZE 2 ** 12
 
 module ram(
   input clk,
-  input writeEn,
-  input readEn,
-  input [3:0] dIn,
+  input read,
+  input write,
+  input [3:0] in,
   input [11:0] addr,
-  output [3:0] dOut
+  output [3:0] out
 );
 
   reg[3:0] memory [(RAM_SIZE-1):0]
@@ -21,11 +21,11 @@ module ram(
   end
 
   always @(posedge clk) begin
-    if (writeEn) begin
-      memory[addr] = dIn;
+    if (write) begin
+      memory[addr] = in;
     end
   end
 
-  assign dOut = (readEn) ? memory[addr] : 16'b0;
+  assign out = (read) ? memory[addr] : 16'b0;
 
 endmodule
