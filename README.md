@@ -7,11 +7,18 @@ a weekend and COULD also implement in games such as Satisfactory, Minecraft, Rus
 
 ## Architecture
 
+TODO: move notes to here
+
+TODO: simple block diagram of high level modules
+
 See [docs/architecture.md](docs/architecture.md)
 
-## Build
+## Run Testbench
 
-Build and test a Verilog module - `./build.sh mod`
+`make target MOD=alu`
+
+This makefile compiles the target module with `iverilog`, 
+simulates it with `vvp`, and opens the waveform in `gtkwave`.
 
 ## References
 

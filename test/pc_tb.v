@@ -4,17 +4,16 @@ module pc_tb;
 
   reg clk = 1'b0;
   reg rst = 1'b0;
-  reg jmpEn = 1'b0;
-  reg jmpAddr = 12'b0;
+  reg jmp_en = 1'b0;
+  reg [11:0] jmp_addr = 12'b0;
 
-  wire [11:0] currAddr;
+  wire [11:0] curr_addr;
 
-  integer testIdx = 0;
+  integer test_idx = 0;
 
   pc UUT(
-    .clk(clk), .rst(rst),
-    .jmpEn(jmpEn), .jmpAddr(jmpAddr),
-    .currAddr(currAddr)
+    .clk_i(clk), .rst_i(rst), .jmp_en_i(jmp_en), .jmp_addr_i(jmp_addr),
+    .addr_o(curr_addr)
   );
 
   always begin
@@ -22,34 +21,34 @@ module pc_tb;
   end
 
   initial begin
-    $dumpfile("out/pc.vcd");
+    $dumpfile("bin/pc.vcd");
     $dumpvars(0, pc_tb);
 
     // reset
     rst = 1'b1;
-    #10; testIdx++;
+    #25; test_idx++;
 
     // inc
     rst = 1'b0;
-    #25; testIdx++;  // 5 increments
+    #25; test_idx++;
 
     // jump
-    jmpEn = 1'b1;
-    jmpAddr = 12'b000011110000;
-    #10; testIdx++;  // addr + 1
+    jmp_en = 1'b1;
+    jmp_addr = 12'b000011110000;
+    #25; test_idx++;  // addr + 1
 
     // reset
-    jmpEn = 1'b0;
+    jmp_en = 1'b0;
     rst = 1'b1;
-    #10; testIdx++;
+    #25; test_idx++;
 
     // inc
     rst = 1'b0;
-    #25; testIdx++;  // 5 increments
+    #25; test_idx++;
 
     // reset
     rst = 1'b1;
-    #10; testIdx++;
+    #25; test_idx++;
 
     $finish;
     $display("Testbench completed");

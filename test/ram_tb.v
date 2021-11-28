@@ -3,42 +3,50 @@
 module ram_tb;
   
   reg clk = 1'b0;
-  reg write = 1'b0;
-  reg read = 1'b0;
-  reg [3:0] in = 4'b0;
+  reg wen = 1'b0;
+  reg ren = 1'b0;
+  reg [3:0] din = 4'b0;
   reg [11:0] addr = 12'b0;
 
-  wire [3:0] out;
+  wire [3:0] dout;
 
-  integer testIdx = 0;
+  integer test_idx = 0;
 
-  ram UUT(.clk(clk), .write(write), .read(read), .in(in), .addr(addr), .out(out));
+  ram UUT(
+    .clk_i(clk), .wen_i(wen), .ren_i(ren), .din_i(din), .addr_i(addr), 
+    .dout_o(dout)
+  );
 
   always begin
     clk = ~clk; #5;
   end
 
   initial begin
-    $dumpfile("out/ram.vcd");
+    $dumpfile("bin/ram.vcd");
     $dumpvars(0, ram_tb);
 
-    write = 1'b1;
-    in = 4'b0011;
-    #10; testIdx++;
+    wen = 1'b1;
+    din = 4'b0011;
+    #25; test_idx++;
 
-    write = 1'b0;
-    in = 4'b0001;
+    wen = 1'b0;
+    din = 4'b0101;
     addr++;
-    #10; testIdx++;
+    #25; test_idx++;
 
-    write = 1'b1;
-    #10; testIdx++;
+    wen = 1'b1;
+    #25; test_idx++;
 
-    write = 1'b0;
-    #10; testIdx++;
+    wen = 1'b0;
+    ren = 1'b1;
+    #25; test_idx++;
 
+    ren = 1'b0;
     addr--;
-    #10; testIdx++;
+    #25; test_idx++;
+
+    ren = 1'b1;
+    #25; test_idx++;
 
     $finish;
     $display("Testbench completed");

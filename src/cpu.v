@@ -1,62 +1,83 @@
 /* CPU - top level module */
 
 `include "alu.v"
+`include "branch.v"
 `include "ctrlunit.v"
+`include "pc.v"
+`include "ram.v"
 `include "reg8.v"
+`include "rom.v"
 
 module cpu(
-  input clk,
+  input clk_i,
 
-  output reg [11:0] out_PC,
-  output reg [7:0]  out_aci,
-  output reg [7:0]  out_aco,
-  output reg [1:0]  out_flags,  // [C,Z]
-  output reg [6:0]  out_ctrl
+  output reg [11:0] pc_o,
+  output reg [15:0] ins_o,
+  output reg [7:0]  aib_o,    // ACC input bus
+  output reg [7:0]  aob_o,    // ACC output bus
+  output reg [1:0]  flags_o,  // [C,Z]
+  output reg [6:0]  ctrl_o    // [OUT, INP, MW, MR, JMP, IMM, ALU]
 );
 
-  wire [11:0] curr_PC;
-  wire [7:0] bus_ACC_INP, bus_ACC_OUT;
-  wire flag_Z, flag_C;
-  wire ctrl_IMM, ctrl_JMP, ctrl_MR, ctrl_MW, ctrl_INP, ctrl_OUT, ctrl_ALU;
+  wire [11:0] curr_pc;
+  wire [15:0] curr_ins;
+  wire [7:0] bus_aib, bus_aob
+  wire [7:0] bus_out, bus_inp, bus_imm;
+  wire [7:0] bus_alu, bus_op_a;
 
-  wire [15:0] ins;
-  wire [3:0] ins_op;
-  wire [12:0] ins_args;
+  wire [2:0] func_alu, func_other;
 
-  wire [7:0] bus_INP, bus_OUT;
-  wire [7:0] bus_ALU_A;
+  wire flag_z, flag_c, pc_load;
+  wire ctrl_imm, ctrl_jmp, ctrl_mr, ctrl_mw, ctrl_inp, ctrl_out, ctrl_alu;
 
-  buf buf_INP(bus_INP, ctrl_INP), buf_OUT(bus_OUT, ctrl_OUT);
+  // buffers
 
-  buf ops_ALU(ins_op[2:0], ins_op[3]), ops_OTH(ins_op[2:0], ~ins_op[3]);
+  bufif1 inp_to_aib(bus_aib, bus_inp, ctrl_inp);
+  bufif1 imm_to_aib(bus_aib, bus_imm, ctrl_imm);
+  bufif1 alu_to_aib(bus_aib, bus_alu, ctrl_alu);
+  bufif1 aob_to_out(bus_out, bus_aob, ctrl_out);
+
+  bufif1 alu_ops(func_alu, curr_ins[14:12], ctrl_alu);
+  bufif0 other_ops(func_other, curr_ins[14:12], ctrl_alu);
 
   // registers
-  reg8 reg_ACC(.clk(clk), .writeEn(1'b1), .dIn(bus_ACC_INP), .dOut(bus_ACC_OUT));
-  reg8 reg_INP(.clk(clk), .writeEn(ctrl_INP), .dIn(bus_ACC_INP), .dOut(bus_INP));
-  reg8 reg_OUT(.clk(clk), .writeEn(ctrl_OUT), .dIn(bus_ACC_OUT), .dOut(bus_OUT));
-  pc   reg_PC(.clk(clk), .rst(1'b0), .jmpEn(ctrl_JMP), .jmpAddr(12'b0), .currAddr(curr_PC));  // TODO: jmpAddr
 
-  // memory
-  rom rom(.addr(curr_PC), .out(ins));
-  ram ram(.clk(clk), .write(ctrl_MW), .read(ctrl_MR), .in(4'b0), .addr(12'b0), .out(4'b0));  // TODO: dIn ; addr ; dOut
+  pc reg_pc(.clk_i(clk_i), .rst_i(1'b0), .jmp_en_i(pc_load), 
+    .jmp_addr_i(curr_ins[11:0]), .addr_o(curr_pc));
 
-  // modules
-  alu alu(.a(bus_ALU_A), .b(bus_ACC_OUT), .func(ins_op[2:0]), .res(bus_ACC_INP), .fz(flag_Z), .fc(flag_C));
+  reg8 reg_acc(.clk_i(clk_i), .wen_i(1'b1),     .d_i(bus_aib), .q_o(bus_aob));
+  reg8 reg_inp(.clk_i(clk_i), .wen_i(ctrl_inp), .d_i(bus_inp), .q_o(bus_aib));
+  reg8 reg_out(.clk_i(clk_i), .wen_i(ctrl_out), .d_i(bus_aob), .q_o(bus_out));
+
+  // top level modules
+
+  ctrlunit ctrlunit(.op_i(curr_ins[15:12]), .imm_o(ctrl_imm), .jmp_o(ctrl_jmp), .mr_o(ctrl_mr), 
+    .mw_o(ctrl_mw), .inp_o(ctrl_inp), .out_o(ctrl_out), .alu_o(ctrl_alu));
+
+  branch branch(.op_i(curr_ins[15:12]), .flag_z_i(flag_z), .flag_c_i(flag_c), 
+    .ctrl_jmp_i(ctrl_jmp), .branch_o(pc_load));
   
-  ctrlunit ctrlunit(.opcode(ins_op[3:0]), .ctrl_IMM(ctrl_IMM), .ctrl_JMP(ctrl_JMP), .ctrl_MR(ctrl_MR), 
-    .ctrl_MW(ctrl_MW), .ctrl_INP(ctrl_INP), .ctrl_OUT(ctrl_OUT), .ctrl_ALU(ctrl_ALU));
+  // TODO: RAM
+
+  // TODO: ROM
+
+  // TODO: ALU
+  alu alu(.a_imm_i(curr_ins[7:0]), .a_mem_i(), .b_i(bus_aob), .func_i(func_alu), 
+    .result_o(bus_alu), .fz_o(flag_z), fc_o(flag_c));
 
 
-  // TODO: branching check
-  // TODO: ALU ops with buffers
-  // TODO: 
-
+  // circuit TODO:
+  //   - test CTRL_MR buffers...how are ADD,SUB, etc going to work?
+  //     - CTRL_MR | (CTRL_ALU & ADI) ???
+  //   - 
+  //
 
   // outputs
-  assign out_pc <= curr_PC;
-  assign out_aci <= bus_ACC_INP;
-  assign out_aco <= bus_ACC_OUT;
-  assign out_flags <= {flag_C, flag_Z};
-  assign out_ctrl <= {ctrl_IMM, ctrl_JMP, ctrl_MR, ctrl_MW, ctrl_INP, ctrl_OUT, ctrl_ALU};
+  assign pc_o <= curr_pc;
+  assign ins_o <= curr_ins;
+  assign aib_o <= bus_aib;
+  assign aob_o <= bus_aob;
+  assign flags_o <= {flag_c, flag_z};
+  assign ctrl_o <= {ctrl_imm, ctrl_jmp, ctrl_mr, ctrl_mw, ctrl_inp, ctrl_out, ctrl_alu};
 
 endmodule

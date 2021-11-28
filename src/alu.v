@@ -1,29 +1,35 @@
 /* Arithmetic Logic Unit - 8 ops */
 
 module alu(
-  input [7:0] a,
-  input [7:0] b,
-  input [2:0] func,
-  output reg [7:0] res,
-  output reg fz,
-  output reg fc
+  input [7:0] a_imm_i,
+  input [7:0] a_mem_i,
+  input [7:0] b_i,
+  input [2:0] func_i,
+  output reg [7:0] result_o,
+  output reg fz_o,
+  output reg fc_o
 );
 
-  always @(*) begin
-    fc = 1'b0;
+  reg [7:0] a;
+  reg is_imm;
 
-    case(func)
-      3'b000:  {fc, res} = a + b;  // ADI
-      3'b001:  {fc, res} = a + b;  // ADD
-      3'b010:  {fc, res} = a - b;  // SUB
-      3'b011:  res = a & b;           // AND
-      3'b100:  res = a | b;           // ORR
-      3'b101:  res = a ^ b;           // XOR
-      3'b110:  res = a << 1;          // LSL
-      3'b111:  res = a >> 1;          // LSR
+  always @(*) begin
+    is_imm = ~(func_i[0] | func_i[1] | func_i[2]);  // ADI = 000
+    a = (is_imm == 1'b1) ? a_imm_i : a_mem_i;
+    fc_o = 1'b0;
+
+    case(func_i)
+      3'b000:  {fc_o, result_o} = a + b_i;  // ADI
+      3'b001:  {fc_o, result_o} = a + b_i;  // ADD
+      3'b010:  {fc_o, result_o} = a - b_i;  // SUB
+      3'b011:  result_o = a & b_i;          // AND
+      3'b100:  result_o = a | b_i;          // ORR
+      3'b101:  result_o = a ^ b_i;          // XOR
+      3'b110:  result_o = a << 1;           // LSL
+      3'b111:  result_o = a >> 1;           // LSR
     endcase
 
-    fz = (res == 8'b0) ? 1'b1 : 1'b0;
+    fz_o = (result_o == 8'b0) ? 1'b1 : 1'b0;
   end
 
 endmodule
