@@ -10,7 +10,6 @@
 
 module cpu(
   input clk_i,
-
   output reg [11:0] pc_o,
   output reg [15:0] ins_o,
   output reg [7:0]  aib_o,    // ACC input bus
@@ -32,10 +31,10 @@ module cpu(
 
   // buffers
 
-  bufif1 inp_to_aib(bus_aib, bus_inp, ctrl_inp);
-  bufif1 imm_to_aib(bus_aib, bus_imm, ctrl_imm);
-  bufif1 alu_to_aib(bus_aib, bus_alu, ctrl_alu);
-  bufif1 aob_to_out(bus_out, bus_aob, ctrl_out);
+  bufif1 inp_to_aib(bus_aib, bus_inp, ctrl_inp);  // INP
+  bufif1 imm_to_aib(bus_aib, bus_imm, ctrl_imm);  // LDI
+  bufif1 alu_to_aib(bus_aib, bus_alu, ctrl_alu);  // ALU opcodes
+  bufif1 aob_to_out(bus_out, bus_aob, ctrl_out);  // OUT
 
   bufif1 alu_ops(func_alu, curr_ins[14:12], ctrl_alu);
   bufif0 other_ops(func_other, curr_ins[14:12], ctrl_alu);

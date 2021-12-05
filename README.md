@@ -11,7 +11,7 @@ a ~1 week and COULD also implement in games such as Minecraft, Rust, etc.
 
 - 4-bit, accumulator-based, harvard architecture
 - 16-bit instruction, 12-bit addresses
-- 2048 byte ROM and 2048 byte RAM; 4-bit word size
+- 4096 nibble ROM and 4096 nibble RAM; 4-bit word size
 - One general purpose 8-bit register, the accumulator
 
 ### Instruction Set

@@ -5,15 +5,13 @@ module rom(
   output [15:0] data_o
 );
 
-  reg [15:0] memory [4095:0];
+  reg [15:0] memory [0:4095];
 
   initial begin
     $display("Loading ROM...");
-    $readmemb("../test/test_rom.txt", memory);
+    $readmemh("test/test_rom.txt", memory);
   end
 
-  always @(addr_i) begin
-    data_o <= memory[addr_i];
-  end
+  assign data_o = memory[addr_i];
 
 endmodule
