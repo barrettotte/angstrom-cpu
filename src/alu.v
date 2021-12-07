@@ -25,8 +25,8 @@ module alu(
       3'b011:  result_o = a & b_i;          // AND
       3'b100:  result_o = a | b_i;          // ORR
       3'b101:  result_o = a ^ b_i;          // XOR
-      3'b110:  result_o = a << 1;           // LSL
-      3'b111:  result_o = a >> 1;           // LSR
+      3'b110:  result_o = b_i << 1;         // LSL
+      3'b111:  result_o = b_i >> 1;         // LSR
     endcase
 
     fz_o = (result_o == 8'b0) ? 1'b1 : 1'b0;

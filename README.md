@@ -3,7 +3,7 @@
 A 4-bit accumulator-based CPU designed to do the bare minimum and nothing more. 
 
 I wanted to have a barebones architecture that I could physically build in
-a ~1 week and COULD also implement in games such as Minecraft, Rust, etc.
+~1 week and COULD also implement in games such as Minecraft, Rust, etc.
 
 ## Architecture
 
@@ -32,8 +32,8 @@ a ~1 week and COULD also implement in games such as Minecraft, Rust, etc.
 | 1011   | `AND`    |        | Logical AND accumulator with memory |
 | 1100   | `ORR`    |        | Logical OR accumulator with memory |
 | 1101   | `XOR`    |        | Logical XOR accumulator with memory |
-| 1110   | `LSL`    |        | Logical shift left memory into accumulator |
-| 1111   | `LSR`    |        | Logical shift right memory into accumulator |
+| 1110   | `LSL`    |        | Logical shift left accumulator |
+| 1111   | `LSR`    |        | Logical shift right accumulator |
 
 ### Registers
 
