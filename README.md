@@ -2,10 +2,12 @@
 
 A 4-bit accumulator-based CPU designed to do the bare minimum and nothing more. 
 
-I wanted to have a barebones accumulator-based architecture to play around with.
-I'm anticipating this has some bugs.
-
 ## Architecture
+
+This started out sounding like a good/fun idea, but I kind of failed on
+execution...I should have really just made a simplified 8-bit CPU. 
+
+But, I decided to just finish this out despite some questionable decisions I made.
 
 ### Summary
 
@@ -16,24 +18,24 @@ I'm anticipating this has some bugs.
 
 ### Instruction Set
 
-| Opcode | Mnemonic | Description | Example |
-| ------ | -------- | ----------- | ------- |
-| 0000   | `LDA`    | Load accumulator low nibble with memory | [example](asm/0000_LDA.asm) | 
-| 0001   | `LDI`    | Load immediate into accumulator         | [example](asm/0001_LDI.asm) | 
-| 0010   | `STA`    | Store accumulator low nibble to memory  | [example](asm/0010_STA.asm) | 
-| 0011   | `INP`    | Load input into accumulator             | [example](asm/0011_INP.asm) | 
-| 0100   | `OUT`    | Load accumulator into output            | [example](asm/0100_OUT.asm) | 
-| 0101   | `BRC`    | Branch on carry flag set                | [example](asm/0101_BRC.asm) | 
-| 0110   | `BRZ`    | Branch on zero flag set                 | [example](asm/0110_BRZ.asm) | 
-| 0111   | `JMP`    | Unconditional jump to address           | [example](asm/0111_JMP.asm) | 
-| 1000   | `ADI`    | Add immediate to accumulator            | [example](asm/1000_ADI.asm) | 
-| 1001   | `ADD`    | Add memory to accumulator               | [example](asm/1001_ADD.asm) | 
-| 1010   | `SUB`    | Subtract memory to accumulator          | [example](asm/1010_SUB.asm) | 
-| 1011   | `AND`    | Logical AND accumulator with memory     | [example](asm/1011_AND.asm) | 
-| 1100   | `ORR`    | Logical OR accumulator with memory      | [example](asm/1100_ORR.asm) | 
-| 1101   | `XOR`    | Logical XOR accumulator with memory     | [example](asm/1101_XOR.asm) | 
-| 1110   | `LSL`    | Logical shift left accumulator          | [example](asm/1110_LSL.asm) | 
-| 1111   | `LSR`    | Logical shift right accumulator         | [example](asm/1111_LSR.asm) | 
+| Opcode   | Mnemonic | Description | Example |
+| -------- | -------- | ----------- | ------- |
+| 0000 (0) | `LDA`    | Load accumulator low nibble with memory | [example](asm/0000_LDA.asm) | 
+| 0001 (1) | `LDI`    | Load immediate into accumulator         | [example](asm/0001_LDI.asm) | 
+| 0010 (2) | `STA`    | Store accumulator low nibble to memory  | [example](asm/0010_STA.asm) | 
+| 0011 (3) | `INP`    | Load input into accumulator             | [example](asm/0011_INP.asm) | 
+| 0100 (4) | `OUT`    | Load accumulator into output            | [example](asm/0100_OUT.asm) | 
+| 0101 (5) | `BRC`    | Branch on carry flag set                | [example](asm/0101_BRC.asm) | 
+| 0110 (6) | `BRZ`    | Branch on zero flag set                 | [example](asm/0110_BRZ.asm) | 
+| 0111 (7) | `JMP`    | Unconditional jump to address           | [example](asm/0111_JMP.asm) | 
+| 1000 (8) | `ADI`    | Add immediate to accumulator            | [example](asm/1000_ADI.asm) | 
+| 1001 (9) | `ADD`    | Add memory to accumulator               | [example](asm/1001_ADD.asm) | 
+| 1010 (A) | `SUB`    | Subtract memory to accumulator          | [example](asm/1010_SUB.asm) | 
+| 1011 (B) | `AND`    | Logical AND accumulator with memory     | [example](asm/1011_AND.asm) | 
+| 1100 (C) | `ORR`    | Logical OR accumulator with memory      | [example](asm/1100_ORR.asm) | 
+| 1101 (D) | `XOR`    | Logical XOR accumulator with memory     | [example](asm/1101_XOR.asm) | 
+| 1110 (E) | `LSL`    | Logical shift left accumulator          | [example](asm/1110_LSL.asm) | 
+| 1111 (F) | `LSR`    | Logical shift right accumulator         | [example](asm/1111_LSR.asm) | 
 
 ### Registers
 
@@ -72,7 +74,7 @@ simulates it with `vvp`, and opens the waveform in `gtkwave`.
 
 ## Assembler
 
-TODO: I hope to make a simple assembler for this at some point in the future.
+TODO: I hope to make a really simple assembler for this at some point in the future.
 
 ## References
 

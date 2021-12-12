@@ -2,7 +2,7 @@
 
 module alu(
   input [7:0] a_imm_i,
-  input [7:0] a_mem_i,
+  input [3:0] a_mem_i,
   input [7:0] b_i,
   input [2:0] func_i,
   output reg [7:0] result_o,
@@ -15,7 +15,7 @@ module alu(
 
   always @(*) begin
     is_imm = ~(func_i[0] | func_i[1] | func_i[2]);  // ADI = 000
-    a = (is_imm == 1'b1) ? a_imm_i : a_mem_i;
+    a = (is_imm == 1'b1) ? a_imm_i : {4'b0000, a_mem_i};
     fc_o = 1'b0;
 
     case(func_i)

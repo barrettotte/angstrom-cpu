@@ -13,7 +13,7 @@ module cpu_tb;
 
   integer test_idx = 0;
 
-  branch UUT(
+  cpu UUT(
     .clk_i(clk), .aib_i(aib), .pc_o(pc), .ins_o(ins),
     .aob_o(aob), .flags_o(flags), .ctrl_o(ctrl)
   );
@@ -24,7 +24,7 @@ module cpu_tb;
 
   initial begin
     $dumpfile("bin/cpu.vcd");
-    $dumpvars(0, branch_tb);
+    $dumpvars(0, cpu_tb);
 
     #25; test_idx++;
 

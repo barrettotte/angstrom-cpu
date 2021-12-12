@@ -10,18 +10,19 @@
 
 module cpu(
   input clk_i,
-  input [7:0]  aib_i,         // ACC input bus
-  output reg [11:0] pc_o,
-  output reg [15:0] ins_o,
-  output reg [7:0]  aob_o,    // ACC output bus
-  output reg [1:0]  flags_o,  // [C,Z]
-  output reg [6:0]  ctrl_o    // [OUT, INP, MW, MR, JMP, IMM, ALU]
+  input [7:0]  aib_i,     // ACC input bus
+  output [11:0] pc_o,     // instruction
+  output [15:0] ins_o,    // program counter
+  output [7:0]  aob_o,    // ACC output bus
+  output [1:0]  flags_o,  // [C,Z]
+  output [6:0]  ctrl_o    // [OUT, INP, MW, MR, JMP, IMM, ALU]
 );
 
   wire [11:0] curr_pc;
   wire [15:0] curr_ins;
   wire [7:0] bus_aib, bus_aob;
-  wire [7:0] bus_out, bus_inp, bus_imm, bus_mem, bus_alu;
+  wire [7:0] bus_out, bus_inp, bus_imm, bus_alu;
+  wire [3:0] bus_mem;
 
   wire [2:0] func_alu, func_other;
 
@@ -59,7 +60,7 @@ module cpu(
     .ctrl_jmp_i(ctrl_jmp), .branch_o(pc_load));
 
   ram ram(.clk_i(clk_i), .ren_i(ctrl_mr), .wen_i(ctrl_mw), 
-    .din_i(bus_alu), .addr_i(curr_ins[11:0]), .dout_o(bus_mem));
+    .din_i(bus_alu[3:0]), .addr_i(curr_ins[11:0]), .dout_o(bus_mem));
 
   alu alu(.a_imm_i(curr_ins[7:0]), .a_mem_i(bus_mem), .b_i(bus_aob), .func_i(curr_ins[14:12]), 
     .result_o(bus_alu), .fz_o(flag_z), .fc_o(flag_c));

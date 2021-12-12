@@ -3,7 +3,7 @@
 module alu_tb;
 
   reg [7:0] a_imm = 8'b00000000;
-  reg [7:0] a_mem = 8'b00000000;
+  reg [3:0] a_mem = 4'b0000;
   reg [7:0] b = 8'b00000000;  // ACC
   reg [2:0] func = 3'b000;
 
@@ -24,56 +24,56 @@ module alu_tb;
     // ADI
     func = 3'b000;
     a_imm = 8'b00000001;
-    a_mem = 8'b00000000;
+    a_mem = 4'b0000;
     b = 8'b00000000;
     #25; test_idx++;
 
     // ADD
     func = 3'b001;
     a_imm = 8'b00000000;
-    a_mem = 8'b00001100;
+    a_mem = 4'b1100;
     b = 8'b00000000;
     #25; test_idx++;
 
     // SUB
     func = 3'b010;
     a_imm = 8'b00000000;
-    a_mem = 8'b00000001;
+    a_mem = 4'b0001;
     b = 8'b00000001;
     #25; test_idx++;
 
     // AND
     func = 3'b011;
     a_imm = 8'b00000000;
-    a_mem = 8'b00001111;
+    a_mem = 4'b0011;
     b = 8'b11111111;
     #25; test_idx++;
 
     // ORR
     func = 3'b100;
     a_imm = 8'b00000000;
-    a_mem = 8'b11001100;
+    a_mem = 4'b1100;
     b = 8'b00110011;
     #25; test_idx++;
 
     // XOR
     func = 3'b101;
     a_imm = 8'b00000000;
-    a_mem = 8'b11110000;
+    a_mem = 4'b1100;
     b = 8'b01010101;
     #25; test_idx++;
 
     // LSL
     func = 3'b110;
     a_imm = 8'b00000000;
-    a_mem = 8'b00001100;
+    a_mem = 4'b0110;
     b = 8'b00000000;
     #25; test_idx++;
 
     // LSR
     func = 3'b111;
     a_imm = 8'b00000000;
-    a_mem = 8'b00001100;
+    a_mem = 4'b0110;
     b = 8'b00000000;
     #25; test_idx++;
 
