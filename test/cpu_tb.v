@@ -26,7 +26,21 @@ module cpu_tb;
     $dumpfile("bin/cpu.vcd");
     $dumpvars(0, branch_tb);
 
-    // TODO:
+    #25; test_idx++;
+
+    #25; test_idx++;
+
+    #25; test_idx++;
+
+    #25; test_idx++;
+
+    #25; test_idx++;
+
+    #25; test_idx++;
+
+    #25; test_idx++;
+
+    #25; test_idx++;
 
     $finish;
     $display("Testbench completed");

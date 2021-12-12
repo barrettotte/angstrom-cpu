@@ -29,11 +29,15 @@ module cpu(
   wire ctrl_imm, ctrl_jmp, ctrl_mr, ctrl_mw, ctrl_inp, ctrl_out, ctrl_alu;
 
   // buffers
+  wire [7:0] buf_inp_to_aib; // INP
+  wire [7:0] buf_imm_to_aib; // LDI
+  wire [7:0] buf_alu_to_aib; // ALU opcodes
+  wire [7:0] buf_aob_to_out; // OUT
 
-  bufif1 inp_to_aib(bus_aib, bus_inp, ctrl_inp);  // INP
-  bufif1 imm_to_aib(bus_aib, bus_imm, ctrl_imm);  // LDI
-  bufif1 alu_to_aib(bus_aib, bus_alu, ctrl_alu);  // ALU opcodes
-  bufif1 aob_to_out(bus_out, bus_aob, ctrl_out);  // OUT
+  // bufif inp_to_aib(bus_aib, bus_inp, ctrl_inp);  // INP
+  // bufif1 imm_to_aib(bus_aib, bus_imm, ctrl_imm);  // LDI
+  // bufif1 alu_to_aib(bus_aib, bus_alu, ctrl_alu);  // ALU opcodes
+  // bufif1 aob_to_out(bus_out, bus_aob, ctrl_out);  // OUT
 
   // registers
 
@@ -58,13 +62,13 @@ module cpu(
     .din_i(bus_alu), .addr_i(curr_ins[11:0]), .dout_o(bus_mem));
 
   alu alu(.a_imm_i(curr_ins[7:0]), .a_mem_i(bus_mem), .b_i(bus_aob), .func_i(curr_ins[14:12]), 
-    .result_o(bus_alu), .fz_o(flag_z), fc_o(flag_c));
+    .result_o(bus_alu), .fz_o(flag_z), .fc_o(flag_c));
 
   // outputs
-  assign pc_o <= curr_pc;
-  assign ins_o <= curr_ins;
-  assign aob_o <= bus_aob;
-  assign flags_o <= {flag_c, flag_z};
-  assign ctrl_o <= {ctrl_imm, ctrl_jmp, ctrl_mr, ctrl_mw, ctrl_inp, ctrl_out, ctrl_alu};
+  assign pc_o = curr_pc;
+  assign ins_o = curr_ins;
+  assign aob_o = bus_aob;
+  assign flags_o = {flag_c, flag_z};
+  assign ctrl_o = {ctrl_imm, ctrl_jmp, ctrl_mr, ctrl_mw, ctrl_inp, ctrl_out, ctrl_alu};
 
 endmodule
