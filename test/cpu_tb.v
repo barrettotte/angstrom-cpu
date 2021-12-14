@@ -5,7 +5,7 @@ module cpu_tb;
   reg clk = 1'b0;
   reg [7:0] reg_inp = 8'b0;
 
-  wire [7:0] reg_out = 8'b0;
+  wire [7:0] reg_out;
 
   integer test_idx = 0;
 
@@ -18,22 +18,10 @@ module cpu_tb;
   initial begin
     $dumpfile("bin/cpu.vcd");
     $dumpvars(0, cpu_tb);
-
-    #25; test_idx++;
-
-    #25; test_idx++;
-
-    #25; test_idx++;
-
-    #25; test_idx++;
-
-    #25; test_idx++;
-
-    #25; test_idx++;
-
-    #25; test_idx++;
-
-    #25; test_idx++;
+    
+    for (test_idx = 0; test_idx < 32; test_idx++) begin
+      #25;
+    end
 
     $finish;
     $display("Testbench completed");
