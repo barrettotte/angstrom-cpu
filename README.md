@@ -7,8 +7,6 @@ A 4-bit accumulator-based CPU designed to do the bare minimum and nothing more.
 This started out sounding like a good/fun idea, but I kind of failed on
 execution...I should have really just made a simplified 8-bit CPU. 
 
-But, I decided to just finish this out despite some questionable decisions I made.
-
 ### Summary
 
 - 4-bit, accumulator-based, harvard architecture
