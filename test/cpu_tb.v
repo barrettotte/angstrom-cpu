@@ -3,20 +3,13 @@
 module cpu_tb;
 
   reg clk = 1'b0;
-  reg [7:0] aib = 8'b0;
+  reg [7:0] reg_inp = 8'b0;
 
-  wire [11:0] pc = 12'b0;
-  wire [15:0] ins = 16'b0;
-  wire [7:0] aob = 8'b0;
-  wire [1:0] flags = 2'b0;
-  wire [6:0] ctrl = 7'b0;
+  wire [7:0] reg_out = 8'b0;
 
   integer test_idx = 0;
 
-  cpu UUT(
-    .clk_i(clk), .aib_i(aib), .pc_o(pc), .ins_o(ins),
-    .aob_o(aob), .flags_o(flags), .ctrl_o(ctrl)
-  );
+  cpu UUT(.clk_i(clk), .reg_inp_i(reg_inp), .reg_out_o(reg_out));
 
   always begin
     clk = ~clk; #5;

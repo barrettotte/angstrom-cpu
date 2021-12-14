@@ -6,14 +6,11 @@ module reg8_tb;
   reg wen = 1'b0;
   reg [7:0] d = 8'b0;
 
-  wire [7:0] q = 8'b0;
+  wire [7:0] q;
 
   integer test_idx = 0;
 
-  reg8 UUT(
-    .clk_i(clk), .wen_i(wen), .d_i(d), 
-    .q_o(q)
-  );
+  reg8 UUT(.clk_i(clk), .wen_i(wen), .d_i(d), .q_o(q));
   
   always begin
     clk = ~clk; #5;

@@ -14,7 +14,7 @@ module ram(
 
   // clear RAM on start
   initial begin
-    for (i = 0; i < 4095; i++) begin
+    for (i = 0; i < 4096; i++) begin
       memory[i] <= 4'b0;
     end
   end

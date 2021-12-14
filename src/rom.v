@@ -2,7 +2,7 @@
 
 module rom(
   input [11:0] addr_i,
-  output [15:0] data_o
+  output reg [15:0] data_o
 );
 
   reg [15:0] memory [0:4095];
@@ -12,6 +12,8 @@ module rom(
     $readmemh("test/test_rom.txt", memory);
   end
 
-  assign data_o = memory[addr_i];
+  always @(*) begin
+    data_o <= memory[addr_i];
+  end
 
 endmodule

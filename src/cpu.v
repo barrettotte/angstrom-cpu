@@ -10,47 +10,29 @@
 
 module cpu(
   input clk_i,
-  input [7:0]  aib_i,     // ACC input bus
-  output [11:0] pc_o,     // instruction
-  output [15:0] ins_o,    // program counter
-  output [7:0]  aob_o,    // ACC output bus
-  output [1:0]  flags_o,  // [C,Z]
-  output [6:0]  ctrl_o    // [OUT, INP, MW, MR, JMP, IMM, ALU]
+  input [7:0] reg_inp_i,  // INP
+  output reg [7:0] reg_out_o  // OUT
 );
 
   wire [11:0] curr_pc;
   wire [15:0] curr_ins;
-  wire [7:0] bus_aib, bus_aob;
-  wire [7:0] bus_out, bus_inp, bus_imm, bus_alu;
+  wire [7:0] bus_aob, bus_imm, bus_alu, bus_inp, bus_out;
+  reg [7:0] bus_aib;
   wire [3:0] bus_mem;
-
   wire [2:0] func_alu, func_other;
 
   wire flag_z, flag_c, pc_load;
   wire ctrl_imm, ctrl_jmp, ctrl_mr, ctrl_mw, ctrl_inp, ctrl_out, ctrl_alu;
 
-  // buffers
-  wire [7:0] buf_inp_to_aib; // INP
-  wire [7:0] buf_imm_to_aib; // LDI
-  wire [7:0] buf_alu_to_aib; // ALU opcodes
-  wire [7:0] buf_aob_to_out; // OUT
-
-  // bufif inp_to_aib(bus_aib, bus_inp, ctrl_inp);  // INP
-  // bufif1 imm_to_aib(bus_aib, bus_imm, ctrl_imm);  // LDI
-  // bufif1 alu_to_aib(bus_aib, bus_alu, ctrl_alu);  // ALU opcodes
-  // bufif1 aob_to_out(bus_out, bus_aob, ctrl_out);  // OUT
-
   // registers
-
   pc reg_pc(.clk_i(clk_i), .rst_i(1'b0), .jmp_en_i(pc_load), 
     .jmp_addr_i(curr_ins[11:0]), .addr_o(curr_pc));
 
   reg8 reg_acc(.clk_i(clk_i), .wen_i(1'b1),     .d_i(bus_aib), .q_o(bus_aob));
-  reg8 reg_inp(.clk_i(clk_i), .wen_i(ctrl_inp), .d_i(bus_inp), .q_o(bus_aib));
+  reg8 reg_inp(.clk_i(clk_i), .wen_i(ctrl_inp), .d_i(reg_inp_i), .q_o(bus_inp));
   reg8 reg_out(.clk_i(clk_i), .wen_i(ctrl_out), .d_i(bus_aob), .q_o(bus_out));
 
   // top level modules
-
   rom rom(.addr_i(curr_pc), .data_o(curr_ins));
 
   ctrlunit ctrlunit(.op_i(curr_ins[15:12]), .imm_o(ctrl_imm), .jmp_o(ctrl_jmp), .mr_o(ctrl_mr), 
@@ -65,11 +47,20 @@ module cpu(
   alu alu(.a_imm_i(curr_ins[7:0]), .a_mem_i(bus_mem), .b_i(bus_aob), .func_i(curr_ins[14:12]), 
     .result_o(bus_alu), .fz_o(flag_z), .fc_o(flag_c));
 
-  // outputs
-  assign pc_o = curr_pc;
-  assign ins_o = curr_ins;
-  assign aob_o = bus_aob;
-  assign flags_o = {flag_c, flag_z};
-  assign ctrl_o = {ctrl_imm, ctrl_jmp, ctrl_mr, ctrl_mw, ctrl_inp, ctrl_out, ctrl_alu};
+  // assign to bus
+  always @(*) begin
+    
+    // ACC input bus
+    if (ctrl_inp)
+      bus_aib <= bus_inp;  // INP
+    else if (ctrl_imm)
+      bus_aib <= bus_imm;  // IMM
+    else if (ctrl_alu)
+      bus_aib <= bus_alu;  // ALU opcodes
+    else
+      bus_aib <= 8'bz;
+
+    reg_out_o <= (ctrl_out) ? bus_aob : 8'bz;  // ACC output bus
+  end
 
 endmodule

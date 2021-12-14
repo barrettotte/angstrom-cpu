@@ -3,7 +3,7 @@
 module rom_tb;
   
   reg [11:0] addr = 12'b0;
-  wire [15:0] data;
+  wire [15:0] data = 15'b0;
 
   integer test_idx = 0;
 
