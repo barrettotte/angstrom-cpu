@@ -14,6 +14,8 @@ execution...I should have really just made a simplified 8-bit CPU.
 - 4-bit word size; 12-bit addressing; 16384 byte RAM (4x4096)
 - One general purpose 8-bit register, the accumulator
 
+<img src="docs/images/circuit.png"  width="75%" height="75%"/>
+
 ### Instruction Set
 
 | Opcode   | Mnemonic | Description | Example |
